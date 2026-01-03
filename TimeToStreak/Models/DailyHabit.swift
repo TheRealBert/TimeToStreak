@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct DailyHabit: Identifiable, Codable {
+    var id = UUID()
+    var date: Date
+    var topicId: UUID
+    var optionId: UUID?         // nil = unset
+}

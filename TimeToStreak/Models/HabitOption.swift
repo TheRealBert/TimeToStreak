@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+struct HabitOption: Identifiable, Codable {
+    var id = UUID()
+    var topicId: UUID
+    var name: String
+    var colorHex: String
+    var sortOrder: Int
+    var active: Bool
+}

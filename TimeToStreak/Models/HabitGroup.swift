@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct HabitGroup: Identifiable, Codable {
+    var id = UUID()
+    var name: String
+    var topicIds: [UUID]
+}
