@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HabitOption: Identifiable, Codable {
+struct StreakOption: Identifiable, Codable {
     var id = UUID()
     var topicId: UUID
     var name: String

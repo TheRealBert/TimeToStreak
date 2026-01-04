@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct HabitGroup: Identifiable, Codable {
+struct StreakGroup: Identifiable, Codable {
     var id = UUID()
     var name: String
     var topicIds: [UUID]

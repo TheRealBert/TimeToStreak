@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DailyHabit: Identifiable, Codable {
+struct DailyStreak: Identifiable, Codable {
     var id = UUID()
     var date: Date
     var topicId: UUID
