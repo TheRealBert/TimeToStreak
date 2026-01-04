@@ -10,6 +10,9 @@ import SwiftUI
 struct CreateStreakMainView: View {
     
     @State var habitName: String = ""
+    @State var streakOption: String = ""
+    @State var optionColor: Color = .gray
+    @State var streakOptions: [StreakOption] = []
     
     var body: some View {
         
@@ -41,7 +44,7 @@ struct CreateStreakMainView: View {
                 .frame(height: 35)
                 
                 ScrollView {
-                    HabitChoiceButton(habitText: "0 Drinks", habitColor: .red, opacity: 0.25)
+                    HabitChoiceButton(habitText: streakOption == "" ? "Add Streak Option" : streakOption, habitColor: optionColor, opacity: 0.25)
                     
                     HabitChoiceButton(habitText: "1 - 2 Drinks", habitColor: .blue, opacity: 0.25)
 
@@ -68,57 +71,17 @@ struct CreateStreakMainView: View {
                     
                     RoundedRectangle(cornerRadius: 30)
                         .foregroundStyle(.gray)
+                    
+                    RoundedRectangle(cornerRadius: 30)
+                        .stroke(style: StrokeStyle(lineWidth: 1))
                         
-                    VStack {
-                        
-                        Text("Enter a Streak Goal")
-                            .font(.headline)
-                            .bold()
-                        Text("(What do you want to streak?)")
-                            .font(.footnote)
-                        
-                        Spacer()
-                        
-                        Text("Example: How many drinks did I have today?")
-                            .font(.footnote)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .multilineTextAlignment(.center)
-                        Text("Example: Did I drink today?")
-                            .font(.footnote)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .multilineTextAlignment(.center)
-                        Text("Example: # of Drinks.")
-                            .font(.footnote)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .multilineTextAlignment(.center)
-                        
-                        Spacer()
-                        
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .foregroundStyle(.white)
-                            
-                            TextField("What do you want to streak?", text: $habitName)
-                                .padding()
-                                .frame(maxHeight: .infinity, alignment: .topLeading)
-                                
-                        }
-                        .frame(height: 150)
-                        
-                        Spacer()
-                        
-                        Button {
-                            // TODO: LINK UP
-
-                        } label: {
-                            HabitChoiceButton(habitText: "Confirm & Next", habitColor: .black, opacity: habitName == "" ? 0.25 : 1.00)
-                        }
-                        
-                    }
+//                    EnterStreakGoalView(habitName: $habitName)
+                    AddStreakOptionView(streakOption: $streakOption, optionColor: $optionColor)
+//                    PreviewAndLaunchView()
                     .padding()
                     
                 }
-                .frame(height: 400)
+                .frame(height: 400) // 400 or 150
                 
             }
             
