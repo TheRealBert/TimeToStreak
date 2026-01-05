@@ -8,105 +8,122 @@
 import SwiftUI
 
 struct CreateStreakMainView: View {
-    
+
     @Environment(UserInputPresentedViews.self) private var userInputPresentedViews
     @Environment(StreakViewModel.self) private var streakVM
-    
-    @State var habitName: String = ""
-    @State var streakOption: String = ""
-    @State var optionColor: Color = .gray
-    @State var streakOptions: [StreakOption] = []
-    
+
+    @State private var habitName: String = ""
+    @State private var streakOption: String = ""
+    @State private var optionColor: Color = .gray
+
+    private var sheetHeight: CGFloat {
+        userInputPresentedViews.currentView == .reviewLaunchView ? 150 : 400
+    }
+
+    private var previewTitle: String {
+        habitName.isEmpty ? "Streak Goal" : habitName
+    }
+
+    private var previewOptions: [StreakOption] {
+        let sorted = streakVM.streaks.sorted { $0.sortOrder < $1.sortOrder }
+        if !sorted.isEmpty { return sorted }
+
+        // Empty state placeholders so the preview never looks blank
+        return [
+            StreakOption(topicId: UUID(), name: "Add streak option", colorHex: "#C7C7CC", sortOrder: 0, active: true),
+            StreakOption(topicId: UUID(), name: "Add streak option", colorHex: "#C7C7CC", sortOrder: 1, active: true),
+            StreakOption(topicId: UUID(), name: "Add streak option", colorHex: "#C7C7CC", sortOrder: 2, active: true)
+        ]
+    }
+
     var body: some View {
-        
-        ZStack {
+        VStack(spacing: 16) {
+
+            HStack {
+                Text("PREVIEW")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(
+                        Capsule()
+                            .fill(Color.primary.opacity(0.08))
+                    )
+
+                Spacer()
+            }
             
-            RoundedRectangle(cornerRadius: 30)
-                .stroke(style: StrokeStyle(lineWidth: 1.0))
-            
-            VStack {
-                
-                Text(habitName == "" ? "Streak Goal" : "\(habitName)")
+            // Preview card
+            VStack(spacing: 12) {
+                Text(previewTitle)
                     .font(.title3)
-                    .multilineTextAlignment(.center)
                     .bold()
-                    .padding(.bottom, 5)
-                
-                HStack(alignment: .center, spacing: 5) {
-                    
+                    .multilineTextAlignment(.center)
+
+                HStack(spacing: 8) {
                     Image(systemName: "calendar")
-                        .resizable()
-                        .scaledToFit()
-                        .padding(2)
-                    
+                        .imageScale(.medium)
+
                     Text(Date(), style: .date)
                         .font(.subheadline)
-                    
+                        .foregroundStyle(.secondary)
                 }
-                .padding(.bottom)
-                .frame(height: 35)
-                
+
                 ScrollView {
-                    
-                    ForEach(streakVM.streaks) { streak in
-                        HabitChoiceButton(habitText: streak.name == "" ? "Add Streak Option" : streak.name, habitColor: Color(hex:streak.colorHex), opacity: 0.25)
+                    VStack(spacing: 10) {
+                        ForEach(previewOptions) { streak in
+                            HabitChoiceButton(
+                                habitText: streak.name,
+                                habitColor: Color(hex: streak.colorHex),
+                                opacity: 0.25
+                            )
+                        }
                     }
-                    
-                    
-                    
-//                    HabitChoiceButton(habitText: "1 - 2 Drinks", habitColor: .blue, opacity: 0.25)
-//
-//                    HabitChoiceButton(habitText: "3 - 4 Drinks", habitColor: .green, opacity: 0.25)
-//                    
-//                    HabitChoiceButton(habitText: "5 - 6 Drinks", habitColor: .yellow, opacity: 0.25)
-//
-//                    HabitChoiceButton(habitText: "7+ Drinks", habitColor: .purple, opacity: 0.25)
-                    
-                    Spacer()
-                        .frame(height: 400)
+                    .padding(.top, 4)
+                    .padding(.bottom, sheetHeight + 16) // replaces spacer hack
                 }
-                
-                Spacer()
-                
             }
-            .padding()
-            
-            VStack {
-                
-                Spacer()
-                
-                ZStack {
-                    
-                    RoundedRectangle(cornerRadius: 30)
-                        .foregroundStyle(.gray)
-                    
-                    RoundedRectangle(cornerRadius: 30)
-                        .stroke(style: StrokeStyle(lineWidth: 1))
-                        
-                    switch userInputPresentedViews.currentView {
-                        
-                    case .goalView:
-                        EnterStreakGoalView(streakTopic: $habitName)
-                            .padding()
-                    case .streakOptionView:
-                        AddStreakOptionView(streakOption: $streakOption, optionColor: $optionColor)
-                            .padding()
-                    case .reviewLaunchView:
-                        ReviewAndLaunchView()
-                            .padding()
-                        
-                    }
-                    
-                    
-                }
-                .frame(height: userInputPresentedViews.currentView == .reviewLaunchView ? 150 : 400)
-                
-            }
-            
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(.background)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 30)
+                    .stroke(Color.primary.opacity(0.12), lineWidth: 1)
+            )
+            .shadow(color: .black.opacity(0.06), radius: 10, y: 6)
+
         }
         .padding(.horizontal)
-        .padding(.vertical, 50)
+        .safeAreaInset(edge: .bottom) {
+            builderSheet
+        }
+    }
 
+    private var builderSheet: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 30)
+                .fill(.ultraThinMaterial)
+
+            RoundedRectangle(cornerRadius: 30)
+                .stroke(Color.primary.opacity(0.12), lineWidth: 1)
+
+            switch userInputPresentedViews.currentView {
+            case .goalView:
+                EnterStreakGoalView(streakTopic: $habitName)
+                    .padding()
+            case .streakOptionView:
+                AddStreakOptionView(streakOption: $streakOption, optionColor: $optionColor)
+                    .padding()
+            case .reviewLaunchView:
+                ReviewAndLaunchView()
+                    .padding()
+            }
+        }
+        .frame(height: sheetHeight)
+        .padding(.horizontal)
+        .padding(.bottom, 8)
     }
 }
 

@@ -9,16 +9,19 @@ import SwiftUI
 
 struct MainView: View {
     
+    @Environment(UserInputPresentedViews.self) private var userInputPresentedViews
+    @Environment(StreakViewModel.self) private var streakVM
+    
     var body: some View {
         
         ZStack {
             
             Rectangle()
-                .foregroundStyle(.gray)
+                .foregroundStyle(Color("Lavender"))
                 .ignoresSafeArea()
             
             VStack {
-                
+                CreateStreakMainView()
                 Spacer()
                 
                 BottomMenuBar()
@@ -32,4 +35,6 @@ struct MainView: View {
 
 #Preview {
     MainView()
+        .environment(UserInputPresentedViews())
+        .environment(StreakViewModel())
 }
