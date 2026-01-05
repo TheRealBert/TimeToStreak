@@ -9,6 +9,9 @@ import SwiftUI
 
 struct CreateStreakMainView: View {
     
+    @Environment(UserInputPresentedViews.self) private var userInputPresentedViews
+    @Environment(StreakViewModel.self) private var streakVM
+    
     @State var habitName: String = ""
     @State var streakOption: String = ""
     @State var optionColor: Color = .gray
@@ -44,15 +47,20 @@ struct CreateStreakMainView: View {
                 .frame(height: 35)
                 
                 ScrollView {
-                    HabitChoiceButton(habitText: streakOption == "" ? "Add Streak Option" : streakOption, habitColor: optionColor, opacity: 0.25)
                     
-                    HabitChoiceButton(habitText: "1 - 2 Drinks", habitColor: .blue, opacity: 0.25)
-
-                    HabitChoiceButton(habitText: "3 - 4 Drinks", habitColor: .green, opacity: 0.25)
+                    ForEach(streakVM.streaks) { streak in
+                        HabitChoiceButton(habitText: streak.name == "" ? "Add Streak Option" : streak.name, habitColor: Color(hex:streak.colorHex), opacity: 0.25)
+                    }
                     
-                    HabitChoiceButton(habitText: "5 - 6 Drinks", habitColor: .yellow, opacity: 0.25)
-
-                    HabitChoiceButton(habitText: "7+ Drinks", habitColor: .purple, opacity: 0.25)
+                    
+                    
+//                    HabitChoiceButton(habitText: "1 - 2 Drinks", habitColor: .blue, opacity: 0.25)
+//
+//                    HabitChoiceButton(habitText: "3 - 4 Drinks", habitColor: .green, opacity: 0.25)
+//                    
+//                    HabitChoiceButton(habitText: "5 - 6 Drinks", habitColor: .yellow, opacity: 0.25)
+//
+//                    HabitChoiceButton(habitText: "7+ Drinks", habitColor: .purple, opacity: 0.25)
                     
                     Spacer()
                         .frame(height: 400)
@@ -75,13 +83,23 @@ struct CreateStreakMainView: View {
                     RoundedRectangle(cornerRadius: 30)
                         .stroke(style: StrokeStyle(lineWidth: 1))
                         
-//                    EnterStreakGoalView(habitName: $habitName)
-                    AddStreakOptionView(streakOption: $streakOption, optionColor: $optionColor)
-//                    PreviewAndLaunchView()
-                    .padding()
+                    switch userInputPresentedViews.currentView {
+                        
+                    case .goalView:
+                        EnterStreakGoalView(streakTopic: $habitName)
+                            .padding()
+                    case .streakOptionView:
+                        AddStreakOptionView(streakOption: $streakOption, optionColor: $optionColor)
+                            .padding()
+                    case .reviewLaunchView:
+                        ReviewAndLaunchView()
+                            .padding()
+                        
+                    }
+                    
                     
                 }
-                .frame(height: 400) // 400 or 150
+                .frame(height: userInputPresentedViews.currentView == .reviewLaunchView ? 150 : 400)
                 
             }
             
@@ -94,4 +112,6 @@ struct CreateStreakMainView: View {
 
 #Preview {
     CreateStreakMainView()
+        .environment(UserInputPresentedViews())
+        .environment(StreakViewModel())
 }

@@ -9,7 +9,10 @@ import SwiftUI
 
 struct EnterStreakGoalView: View {
     
-    @Binding var habitName: String
+    @Environment(UserInputPresentedViews.self) private var userInputPresentedViews
+    @Environment(StreakViewModel.self) private var streakVM
+    
+    @Binding var streakTopic: String
     
     var body: some View {
         
@@ -42,7 +45,7 @@ struct EnterStreakGoalView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(.white)
                 
-                TextField("What do you want to streak?", text: $habitName)
+                TextField("What do you want to streak?", text: $streakTopic)
                     .padding()
                     .frame(maxHeight: .infinity, alignment: .topLeading)
                     
@@ -52,16 +55,21 @@ struct EnterStreakGoalView: View {
             Spacer()
             
             Button {
-                // TODO: LINK UP
+                streakVM.createStreakTopic(topic: streakTopic)
+                userInputPresentedViews.currentView = .streakOptionView
+                print(streakVM.streakTopic?.id ?? "Error: No UUID")
 
             } label: {
-                HabitChoiceButton(habitText: "Confirm & Next", habitColor: .black, opacity: habitName == "" ? 0.25 : 1.00)
+                HabitChoiceButton(habitText: "Confirm & Next", habitColor: .black, opacity: streakTopic == "" ? 0.25 : 1.00)
             }
+            .disabled(streakTopic == "")
             
         }
     }
 }
 
 #Preview {
-    EnterStreakGoalView(habitName: .constant(""))
+    EnterStreakGoalView(streakTopic: .constant(""))
+        .environment(StreakViewModel())
+        .environment(UserInputPresentedViews())
 }

@@ -9,6 +9,9 @@ import SwiftUI
 
 struct AddStreakOptionView: View {
     
+    @Environment(UserInputPresentedViews.self) private var userInputPresentedViews
+    @Environment(StreakViewModel.self) private var streakVM
+    
     @Binding var streakOption: String
     @Binding var optionColor: Color
     
@@ -72,18 +75,29 @@ struct AddStreakOptionView: View {
             
             HStack {
                 Button {
-                    // TODO: LINK UP
+                    streakVM.createStreakOption(topic: streakOption, color: optionColor)
+                    
+                    print(streakVM.streakOption?.topicId ?? "NO UUID")
+                    
+                    streakVM.streakOption = nil
+                    streakOption = ""
+                    
+                    print(streakVM.streakOption?.id ?? "NO UUID")
 
                 } label: {
                     HabitChoiceButton(habitText: "Confirm & Add", habitColor: .black, opacity: streakOption == "" ? 0.25 : 1.00)
                 }
+                .disabled(streakOption == "")
                 
                 Button {
-                    // TODO: LINK UP
+                    userInputPresentedViews.currentView = .reviewLaunchView
+                    
+                    print(streakVM.streaks)
 
                 } label: {
                     HabitChoiceButton(habitText: "Confirm & Preview", habitColor: .black, opacity: streakOption == "" ? 0.25 : 1.00)
                 }
+                .disabled(streakOption == "" && streakVM.streaks.count == 0)
             }
             
             
@@ -92,5 +106,7 @@ struct AddStreakOptionView: View {
 }
 
 #Preview {
-    AddStreakOptionView(streakOption: .constant("1 - Drinks"), optionColor: .constant(.white))
+    AddStreakOptionView(streakOption: .constant(""), optionColor: .constant(.white))
+        .environment(StreakViewModel())
+        .environment(UserInputPresentedViews())
 }
