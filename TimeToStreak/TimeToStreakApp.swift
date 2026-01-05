@@ -12,12 +12,14 @@ struct TimeToStreakApp: App {
     
     private let streakVM = StreakViewModel()
     private let userInputPresentedViews = UserInputPresentedViews()
+    private let mainPresentedViews = MainPresentedViews()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(streakVM)
                 .environment(userInputPresentedViews)
+                .environment(mainPresentedViews)
         }
     }
 }
