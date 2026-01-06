@@ -8,32 +8,31 @@
 import SwiftUI
 
 struct BottomMenuBar: View {
-    
-    @State private var selection: String = "home"
+
+    @Environment(MainPresentedViews.self) private var mainPresentedViews
     @Namespace private var ns
-    
-    private let items: [(key: String, icon: String)] = [
-            ("home", "house.fill"),
-            ("streaks", "list.bullet"),
-            ("goals", "chart.bar.fill"),
-            ("settings", "gear")
-        ]
-    
+
+    private let items: [(view: MainPresentedViews.PageView, icon: String)] = [
+        (.homeView, "house.fill"),
+        (.streaksView, "list.bullet"),
+        (.goalsView, "chart.bar.fill"),
+        (.settingsView, "gear")
+    ]
+
     var body: some View {
-        
         ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .fill(.white)
 
             HStack(spacing: 0) {
-                ForEach(items, id: \.key) { item in
+                ForEach(items, id: \.view) { item in
                     Button {
                         withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                            selection = item.key
+                            mainPresentedViews.currentView = item.view
                         }
                     } label: {
                         ZStack {
-                            if selection == item.key {
+                            if mainPresentedViews.currentView == item.view {
                                 RoundedRectangle(cornerRadius: 14)
                                     .fill(Color.gray.opacity(0.18))
                                     .matchedGeometryEffect(id: "pill", in: ns)
@@ -42,7 +41,11 @@ struct BottomMenuBar: View {
 
                             Image(systemName: item.icon)
                                 .font(.system(size: 18, weight: .semibold))
-                                .foregroundStyle(selection == item.key ? .primary : .secondary)
+                                .foregroundStyle(
+                                    mainPresentedViews.currentView == item.view
+                                    ? .primary
+                                    : .secondary
+                                )
                                 .frame(width: 70, height: 50)
                         }
                     }
@@ -60,4 +63,5 @@ struct BottomMenuBar: View {
 
 #Preview {
     BottomMenuBar()
+        .environment(MainPresentedViews())
 }

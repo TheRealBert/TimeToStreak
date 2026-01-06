@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     
+    @Environment(MainPresentedViews.self) private var mainPresentedViews
     @Environment(UserInputPresentedViews.self) private var userInputPresentedViews
     @Environment(StreakViewModel.self) private var streakVM
     
@@ -21,7 +22,21 @@ struct MainView: View {
                 .ignoresSafeArea()
             
             VStack {
-                CreateStreakMainView()
+                
+                switch mainPresentedViews.currentView {
+                case .homeView:
+                    Text("HOME VIEW")
+                case .createStreaksView:
+                    CreateStreakMainView()
+                        .padding(.horizontal)
+                case .streaksView:
+                    StreaksListView()
+                        .padding(.horizontal)
+                case .goalsView:
+                    Text("GOAL VIEW")
+                case .settingsView:
+                    Text("SETTINGS")
+                }
                 Spacer()
                 
                 BottomMenuBar()
@@ -35,6 +50,7 @@ struct MainView: View {
 
 #Preview {
     MainView()
+        .environment(MainPresentedViews())
         .environment(UserInputPresentedViews())
         .environment(StreakViewModel())
 }
