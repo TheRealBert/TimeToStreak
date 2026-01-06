@@ -10,40 +10,38 @@ import SwiftUI
 struct MainView: View {
     
     @Environment(MainPresentedViews.self) private var mainPresentedViews
-    @Environment(UserInputPresentedViews.self) private var userInputPresentedViews
-    @Environment(StreakViewModel.self) private var streakVM
-    
+
     var body: some View {
         
-        ZStack {
+        @Bindable var mainPresentedViews = mainPresentedViews
+
+        VStack {
             
-            Rectangle()
-                .foregroundStyle(Color("Lavender"))
-                .ignoresSafeArea()
-            
-            VStack {
+            TabView(selection: $mainPresentedViews.currentView) {
+                Rectangle()
+                    .foregroundStyle(.red)
+                    .tag(MainPresentedViews.PageView.homeView)
+
+                StreaksListView()
+                    .padding(.horizontal)
+                    .tag(MainPresentedViews.PageView.streaksView)
+
+                CreateStreakMainView()
+                    .tag(MainPresentedViews.PageView.createStreaksView)
                 
-                switch mainPresentedViews.currentView {
-                case .homeView:
-                    Text("HOME VIEW")
-                case .createStreaksView:
-                    CreateStreakMainView()
-                        .padding(.horizontal)
-                case .streaksView:
-                    StreaksListView()
-                        .padding(.horizontal)
-                case .goalsView:
-                    Text("GOAL VIEW")
-                case .settingsView:
-                    Text("SETTINGS")
-                }
-                Spacer()
-                
-                BottomMenuBar()
-                
+                Rectangle()
+                    .foregroundStyle(.blue)
+                    .tag(MainPresentedViews.PageView.goalsView)
+
+                Rectangle()
+                    .foregroundStyle(.yellow)
+                    .tag(MainPresentedViews.PageView.settingsView)
             }
-            
-            
+
+            .tabViewStyle(.page(indexDisplayMode: .never))
+
+            BottomMenuBar()
+        
         }
     }
 }

@@ -28,10 +28,8 @@ struct StreaksListView: View {
                 }
                 
             }
-
-            Spacer()
+            
         }
-        
         
     }
 }

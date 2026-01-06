@@ -16,13 +16,13 @@ final class MainPresentedViews {
     
     var currentView: PageView = .homeView
     
-    enum PageView {
+    enum PageView: Hashable {
         
         case homeView,
              streaksView,
+             createStreaksView,
              goalsView,
-             settingsView,
-             createStreaksView
+             settingsView
         
     }
     

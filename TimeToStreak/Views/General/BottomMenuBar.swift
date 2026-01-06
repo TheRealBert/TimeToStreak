@@ -15,6 +15,7 @@ struct BottomMenuBar: View {
     private let items: [(view: MainPresentedViews.PageView, icon: String)] = [
         (.homeView, "house.fill"),
         (.streaksView, "list.bullet"),
+        (.createStreaksView, "plus.circle.fill"),
         (.goalsView, "chart.bar.fill"),
         (.settingsView, "gear")
     ]
@@ -56,7 +57,7 @@ struct BottomMenuBar: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(Color.gray.opacity(0.25), lineWidth: 1)
         }
-        .frame(width: 200, height: 50) // 4 buttons x ~70–80 looks better than 200
+        .frame(width: 350, height: 50) // 4 buttons x ~70–80 looks better than 200
 //        .padding(.horizontal, 16)
     }
 }
