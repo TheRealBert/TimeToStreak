@@ -15,34 +15,42 @@ struct MainView: View {
         
         @Bindable var mainPresentedViews = mainPresentedViews
 
-        VStack {
+        ZStack {
             
-            TabView(selection: $mainPresentedViews.currentView) {
-                Rectangle()
-                    .foregroundStyle(.red)
-                    .tag(MainPresentedViews.PageView.homeView)
-
-                StreaksListView()
-                    .padding(.horizontal)
-                    .tag(MainPresentedViews.PageView.streaksView)
-
-                CreateStreakMainView()
-                    .tag(MainPresentedViews.PageView.createStreaksView)
+            Rectangle()
+                .foregroundStyle(Color("Lavender"))
+                .ignoresSafeArea()
+            
+            VStack {
                 
-                Rectangle()
-                    .foregroundStyle(.blue)
-                    .tag(MainPresentedViews.PageView.goalsView)
+                TabView(selection: $mainPresentedViews.currentView) {
+                    HomeView()
+                        .foregroundStyle(.red)
+                        .tag(MainPresentedViews.PageView.homeView)
 
-                Rectangle()
-                    .foregroundStyle(.yellow)
-                    .tag(MainPresentedViews.PageView.settingsView)
+                    StreaksListView()
+                        .padding(.horizontal)
+                        .tag(MainPresentedViews.PageView.streaksView)
+
+                    CreateStreakMainView()
+                        .tag(MainPresentedViews.PageView.createStreaksView)
+                    
+                    Rectangle()
+                        .foregroundStyle(.blue)
+                        .tag(MainPresentedViews.PageView.goalsView)
+
+                    Rectangle()
+                        .foregroundStyle(.yellow)
+                        .tag(MainPresentedViews.PageView.settingsView)
+                }
+
+                .tabViewStyle(.page(indexDisplayMode: .never))
+
+                BottomMenuBar()
+            
             }
-
-            .tabViewStyle(.page(indexDisplayMode: .never))
-
-            BottomMenuBar()
-        
         }
+        
     }
 }
 

@@ -14,4 +14,5 @@ struct StreakOption: Identifiable, Codable {
     var colorHex: String
     var sortOrder: Int
     var active: Bool
+    var value: Double?
 }

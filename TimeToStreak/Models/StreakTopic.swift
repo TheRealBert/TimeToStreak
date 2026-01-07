@@ -14,4 +14,7 @@ struct StreakTopic: Identifiable, Codable {
     var frequencyPeriod: Int?
     var startDate: Date?
     var endDate: Date?
+    var baselineValue: Double?  // e.g., 8 for sleep, 0 for alcohol
 }
+
+
