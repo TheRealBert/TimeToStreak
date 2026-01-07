@@ -56,6 +56,7 @@ struct EnterStreakGoalView: View {
             
             Button {
                 streakVM.createStreakTopic(topic: streakTopic)
+                streakVM.addStreakTopic()
                 userInputPresentedViews.currentView = .streakOptionView
                 print(streakVM.streakTopic?.id ?? "Error: No UUID")
 

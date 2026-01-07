@@ -14,7 +14,7 @@ struct CreateStreakMainView: View {
 
     @State private var habitName: String = ""
     @State private var streakOption: String = ""
-    @State private var optionColor: Color = .gray
+    @State private var optionColor: Color = .clear
 
     private var sheetHeight: CGFloat {
         userInputPresentedViews.currentView == .reviewLaunchView ? 150 : 400
@@ -25,7 +25,7 @@ struct CreateStreakMainView: View {
     }
 
     private var previewOptions: [StreakOption] {
-        let sorted = streakVM.streaks.sorted { $0.sortOrder < $1.sortOrder }
+        let sorted = streakVM.allStreakOptions.sorted { $0.sortOrder < $1.sortOrder }
         if !sorted.isEmpty { return sorted }
 
         // Empty state placeholders so the preview never looks blank

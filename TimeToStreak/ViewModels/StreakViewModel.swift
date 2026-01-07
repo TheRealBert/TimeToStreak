@@ -14,16 +14,26 @@ import UIKit
 @Observable
 final class StreakViewModel {
     
-    var streaks: [StreakOption] = []
+    var allStreakOptions: [StreakOption] = []
     var streakOption: StreakOption?
     var streakTopic: StreakTopic?
+    var allStreakTopics: [StreakTopic] = []
+    var streakEntry: StreakEntry?
+    var streakEntries: [StreakEntry] = []
     
-    private func addStreakOptionToStreaks(streakOption: StreakOption) {
-        streaks.append(streakOption)
+    private func addStreakOptionToAllStreakOptions(streakOption: StreakOption) {
+        allStreakOptions.append(streakOption)
     }
     
     func createStreakTopic(topic: String) {
         streakTopic = StreakTopic(name: topic)
+    }
+    
+    func addStreakTopic() {
+        if let topic = streakTopic {
+            allStreakTopics.append(topic)
+        }
+        
     }
     
     func createStreakOption(topic: String, color: Color) {
@@ -33,9 +43,29 @@ final class StreakViewModel {
         }
         
         if streakOption != nil {
-            addStreakOptionToStreaks(streakOption: streakOption!)
+            addStreakOptionToAllStreakOptions(streakOption: streakOption!)
         } else {
             print("Error appending StreakOption. StreakOption nil")
+        }
+        
+    }
+    
+    func createStreakEntry(optionId: UUID, date: Date) {
+        
+        if let topic = streakTopic {
+            streakEntry = StreakEntry(topicId: topic.id, date: date, optionId: optionId)
+        } else {
+            print("Topic does not exist")
+        }
+
+    }
+    
+    func addStreakEntry() {
+        
+        if let entry = streakEntry {
+            streakEntries.append(entry)
+        } else {
+            print("Streak Entry does not exist")
         }
         
     }

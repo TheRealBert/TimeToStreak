@@ -9,6 +9,8 @@ import SwiftUI
 
 struct StreaksListRow: View {
     
+    var streakTopic: StreakTopic
+    
     var body: some View {
         
         ZStack {
@@ -24,7 +26,7 @@ struct StreaksListRow: View {
                 HStack(alignment: .center) {
                     
                     VStack {
-                        Text("How many drinks today?")
+                        Text(streakTopic.name)
                             .font(.footnote)
                             .bold()
                             .multilineTextAlignment(.leading)
@@ -93,5 +95,5 @@ struct StreaksListRow: View {
 }
 
 #Preview {
-    StreaksListRow()
+    StreaksListRow(streakTopic: StreakTopic(name: "Topic Name"))
 }

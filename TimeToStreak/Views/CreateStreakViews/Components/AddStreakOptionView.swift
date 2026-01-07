@@ -92,12 +92,12 @@ struct AddStreakOptionView: View {
                 Button {
                     userInputPresentedViews.currentView = .reviewLaunchView
                     
-                    print(streakVM.streaks)
+                    print(streakVM.allStreakOptions)
 
                 } label: {
                     HabitChoiceButton(habitText: "Confirm & Preview", habitColor: .black, opacity: streakOption == "" ? 0.25 : 1.00)
                 }
-                .disabled(streakOption == "" && streakVM.streaks.count == 0)
+                .disabled(streakOption == "" && streakVM.allStreakOptions.count == 0)
             }
             
             

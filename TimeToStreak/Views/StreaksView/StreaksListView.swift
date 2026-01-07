@@ -9,6 +9,8 @@ import SwiftUI
 
 struct StreaksListView: View {
     
+    @Environment(StreakViewModel.self) private var streakVM
+    
     var body: some View {
         
         VStack(spacing: 15) {
@@ -23,8 +25,8 @@ struct StreaksListView: View {
             
             ScrollView {
                 
-                ForEach(1...20, id: \.self) { index in
-                    StreaksListRow()
+                ForEach(streakVM.allStreakTopics, id: \.id) { topic in
+                    StreaksListRow(streakTopic: topic)
                 }
                 
             }
